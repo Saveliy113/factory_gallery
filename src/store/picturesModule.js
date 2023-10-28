@@ -43,24 +43,29 @@ export const picturesModule = {
           query: state.searchQuery,
         };
 
-        // const response = await axios.get(
-        //   "https://api.unsplash.com/photos/random",
-        //   {
-        //     params: queryParams,
-        //   }
-        // );
+        if (state.searchQuery) {
+          queryParams.count = 30;
+          queryParams.page = 1;
+        }
 
-        const mockPictures = () => {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve(picturesData);
-            }, 5000);
-          });
-        };
+        const response = await axios.get(
+          "https://api.unsplash.com/photos/random",
+          {
+            params: queryParams,
+          }
+        );
 
-        await mockPictures().then((data) => commit("setPictures", data));
+        // const mockPictures = () => {
+        //   return new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //       resolve(picturesData);
+        //     }, 5000);
+        //   });
+        // };
 
-        // commit("setPictures", response.data);
+        // await mockPictures().then((data) => commit("setPictures", data));
+        console.log(response.data);
+        commit("setPictures", response.data);
         // console.log(response.data);
       } catch (error) {
         commit("setIsPicturesError", true);
