@@ -21,16 +21,16 @@
 </template>
 
 <script>
+import debounce from "lodash.debounce";
 export default {
   name: "search-input",
   props: {
     modelValue: [String, Number],
   },
   methods: {
-    updateInput(event) {
-      console.log(event.target.value);
+    updateInput: debounce(function (event) {
       this.$emit("update:modelValue", event.target.value);
-    },
+    }, 1000),
   },
 };
 </script>

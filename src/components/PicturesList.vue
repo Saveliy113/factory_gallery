@@ -8,7 +8,13 @@
       <loader id="pictures__loader" v-if="isPicturesLoading" />
     </Transition>
     <TransitionGroup name="pictures">
-      <div v-for="picture in pictures" :key="picture.id" class="picture__item">
+      <div
+        @click="$router.push(`/picture/${picture.id}`)"
+        v-if="pictures.length > 0"
+        v-for="picture in pictures"
+        :key="picture.id"
+        class="picture__item"
+      >
         <img :src="picture.urls.regular" alt="" />
       </div>
     </TransitionGroup>
@@ -57,11 +63,11 @@ export default {
 
   watch: {
     searchQuery(newSearchQuery) {
-      console.log("NEW SEARCH QUERY: ", newSearchQuery);
+      this.fetchPictures();
     },
-    pictures(newPictures) {
-      console.log("Received new pictures: ", newPictures);
-    },
+    // pictures(newPictures) {
+    //   console.log("Received new pictures: ", newPictures);
+    // },
   },
 };
 </script>

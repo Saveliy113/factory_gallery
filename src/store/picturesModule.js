@@ -37,13 +37,16 @@ export const picturesModule = {
         commit("setIsPicturesError", false);
         commit("setIsPicturesLoading", true);
 
+        const queryParams = {
+          client_id: "SNlIyTVM4zTTQiKjAd_zwNZfAMStHzCNRsGccpetsEw",
+          count: 8,
+          query: state.searchQuery,
+        };
+
         // const response = await axios.get(
         //   "https://api.unsplash.com/photos/random",
         //   {
-        //     params: {
-        //       client_id: "SNlIyTVM4zTTQiKjAd_zwNZfAMStHzCNRsGccpetsEw",
-        //       count: 8,
-        //     },
+        //     params: queryParams,
         //   }
         // );
 
@@ -57,9 +60,6 @@ export const picturesModule = {
 
         await mockPictures().then((data) => commit("setPictures", data));
 
-        // await mockPictures().then((data) =>
-        //   commit("setPictures", response.data)
-        // );
         // commit("setPictures", response.data);
         // console.log(response.data);
       } catch (error) {
