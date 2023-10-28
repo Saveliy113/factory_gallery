@@ -1,4 +1,5 @@
 import axios from "axios";
+import picturesData from "./picturesData";
 
 export const picturesModule = {
   state: () => ({
@@ -17,7 +18,7 @@ export const picturesModule = {
 
   mutations: {
     setPictures(state, pictures) {
-      state.posts = pictures;
+      state.pictures = pictures;
     },
     setIsPicturesLoading(state, bool) {
       state.isPicturesLoading = bool;
@@ -49,12 +50,16 @@ export const picturesModule = {
         const mockPictures = () => {
           return new Promise((resolve, reject) => {
             setTimeout(() => {
-              resolve("RECEIVED PICTURES DATA");
+              resolve(picturesData);
             }, 5000);
           });
         };
 
-        await mockPictures().then((data) => console.log(data));
+        await mockPictures().then((data) => commit("setPictures", data));
+
+        // await mockPictures().then((data) =>
+        //   commit("setPictures", response.data)
+        // );
         // commit("setPictures", response.data);
         // console.log(response.data);
       } catch (error) {

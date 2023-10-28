@@ -1,13 +1,17 @@
 <template>
   <div class="container">
-    <loader v-if="isPicturesLoading" />
     <h1 v-if="isPicturesError" class="error__message">
       <span>🙁</span>Возникла ошибка при загрузке изображений. Попробуйте
       обновить страницу.
     </h1>
-    <!-- <div v-for="picture in pictures" class="picture__item">
-      <img v-for="picture in pictures" :src="pictures.urls.small" alt="" />
-    </div> -->
+    <Transition name="loader">
+      <loader id="pictures__loader" v-if="isPicturesLoading" />
+    </Transition>
+    <TransitionGroup name="pictures">
+      <div v-for="picture in pictures" :key="picture.id" class="picture__item">
+        <img :src="picture.urls.regular" alt="" />
+      </div>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -55,18 +59,30 @@ export default {
     searchQuery(newSearchQuery) {
       console.log("NEW SEARCH QUERY: ", newSearchQuery);
     },
+    pictures(newPictures) {
+      console.log("Received new pictures: ", newPictures);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .container {
+  position: relative;
+  min-height: 150px;
+  margin-top: 114px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 27px;
-  margin-top: 114px;
   border: 1px solid green;
+
+  > #pictures__loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+  }
 
   > .error__message {
     display: flex;
@@ -78,13 +94,44 @@ export default {
       font-size: 10rem;
     }
   }
+
   .picture__item {
-    max-width: 473px;
+    width: 473px;
     height: 440px;
 
     > img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
+  }
+
+  /* apply transition to moving elements */
+  > .pictures-move,
+  > .pictures-enter-active,
+  > .pictures-leave-active {
+    transition: all 0.5s ease;
+  }
+
+  > .pictures-enter-from,
+  > .pictures-leave-to {
+    opacity: 0;
+    transform: translateX(300px);
+  }
+
+  > .pictures-leave-active {
+    position: absolute;
+  }
+  /*----------*/
+
+  > .loader-enter-active,
+  > .loader-leave-active {
+    transition: opacity 0.3s ease;
+  }
+
+  > .loader-enter-from,
+  > .loader-leave-to {
+    opacity: 0;
   }
 }
 </style>
