@@ -1,5 +1,5 @@
 <template>
-  <header id="header">
+  <header id="header" :class="{ narrow: $route.path !== '/' }">
     <div class="container">
       <img src="@/assets/logo.png" alt="" />
       <div
@@ -8,7 +8,11 @@
           $route.path !== '/' && $route.path !== '/favorites' ? 'flex' : ''
         "
       >
-        <transition-group name="links">
+        <transition-group
+          name="links"
+          appear
+          appearActiveClass="transition-appear-active"
+        >
           <router-link
             key="1"
             to="/favorites"
@@ -55,6 +59,11 @@ export default {};
   width: 100%;
   height: 148px;
   background-color: black;
+  transition: all 0.2s ease-in;
+
+  &.narrow {
+    height: 81px;
+  }
 
   > .container {
     height: 100%;
@@ -100,6 +109,9 @@ export default {};
 
       > .links-leave-active {
         position: absolute;
+      }
+      > .transition-appear-active {
+        transition: none;
       }
     }
 

@@ -23,6 +23,12 @@ export default {
   box-sizing: border-box;
   font-family: Roboto, sans-serif;
 }
+
+a {
+  color: unset;
+  text-decoration: none;
+  cursor: pointer;
+}
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

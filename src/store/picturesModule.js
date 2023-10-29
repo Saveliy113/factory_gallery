@@ -12,6 +12,11 @@ export const picturesModule = {
 
   getters: {
     pictureById: (state) => (pictureId) => {
+      console.log("Picture ID in module: ", pictureId);
+      console.log(
+        "Picture: ",
+        state.pictures.find((picture) => picture.id === pictureId)
+      );
       return state.pictures.filter((picture) => picture.id === pictureId)[0];
     },
   },
@@ -19,6 +24,14 @@ export const picturesModule = {
   mutations: {
     setPictures(state, pictures) {
       state.pictures = pictures;
+    },
+    updatePictures(state, picture) {
+      state.pictures = state.pictures.map((oldPicture) => {
+        if (oldPicture.id === picture.id) {
+          return picture;
+        }
+        return oldPicture;
+      });
     },
     setIsPicturesLoading(state, bool) {
       state.isPicturesLoading = bool;
@@ -36,6 +49,7 @@ export const picturesModule = {
       try {
         commit("setIsPicturesError", false);
         commit("setIsPicturesLoading", true);
+        commit("setPictures", []);
 
         const queryParams = {
           client_id: "SNlIyTVM4zTTQiKjAd_zwNZfAMStHzCNRsGccpetsEw",
@@ -48,24 +62,28 @@ export const picturesModule = {
           queryParams.page = 1;
         }
 
-        const response = await axios.get(
-          "https://api.unsplash.com/photos/random",
-          {
-            params: queryParams,
-          }
-        );
+        // const response = await axios.get(
+        //   "https://api.unsplash.com/photos/random",
+        //   {
+        //     params: queryParams,
+        //   }
+        // );
+        // commit("setPictures", response.data);
 
-        // const mockPictures = () => {
-        //   return new Promise((resolve, reject) => {
-        //     setTimeout(() => {
-        //       resolve(picturesData);
-        //     }, 5000);
-        //   });
-        // };
+        const mockPictures = () => {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(picturesData);
+            }, 3000);
+          });
+        };
+        await mockPictures().then((data) => {
+          console.log(data);
+          commit("setPictures", data);
+        });
 
-        // await mockPictures().then((data) => commit("setPictures", data));
-        console.log(response.data);
-        commit("setPictures", response.data);
+        // console.log(response);
+        // console.log(response.data);
         // console.log(response.data);
       } catch (error) {
         commit("setIsPicturesError", true);

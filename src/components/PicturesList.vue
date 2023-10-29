@@ -58,7 +58,9 @@ export default {
   },
 
   mounted() {
-    this.fetchPictures();
+    if (!this.searchQuery) {
+      this.fetchPictures();
+    }
   },
 
   watch: {
@@ -104,6 +106,7 @@ export default {
   .picture__item {
     width: 473px;
     height: 440px;
+    cursor: pointer;
 
     > img {
       width: 100%;
