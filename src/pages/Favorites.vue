@@ -59,7 +59,6 @@ export default {
 .container {
   margin-top: 0 !important;
   padding-top: 5rem;
-  border: 1px solid blue;
   font-size: 2rem;
   color: black;
 

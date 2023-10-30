@@ -63,7 +63,6 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   gap: 27px;
-  border: 1px solid green;
 
   > #pictures__loader {
     position: absolute;

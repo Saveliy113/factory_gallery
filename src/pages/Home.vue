@@ -84,7 +84,6 @@ h1 {
   border-bottom: 16px solid #c4c4c4;
   > .background {
     height: 268px;
-    border: 1px solid green;
     position: absolute;
     z-index: -1;
 

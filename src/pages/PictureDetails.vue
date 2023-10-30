@@ -102,7 +102,6 @@ export default {
     if (picture) {
       this.picture = picture;
       this.isLiked = picture.liked_by_user;
-      console.log("PICTURE URL: ", this.picture);
     }
   },
 
@@ -126,7 +125,6 @@ export default {
   width: 100%;
   height: 774px;
   padding-top: 43px;
-  border: 1px solid pink;
 
   > .details__background {
     position: absolute;
@@ -145,8 +143,6 @@ export default {
   }
 
   > .container {
-    border: 2px solid red;
-
     > .details__wrapper {
       display: flex;
       justify-content: space-between;
@@ -253,7 +249,6 @@ export default {
       margin: 0 auto;
       position: relative;
       top: 40px;
-      border: 1px solid green;
       width: 80%;
       height: 744px;
 
