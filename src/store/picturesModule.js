@@ -6,6 +6,7 @@ import { apiConfig } from "@/configs/apiConfig";
 export const picturesModule = {
   state: () => ({
     pictures: [],
+    isRandom: null,
     isPicturesLoading: false,
     isPicturesError: false,
     searchQuery: "",
@@ -50,6 +51,9 @@ export const picturesModule = {
     setNoImagesLeft(state, bool) {
       state.noImagesLeft = bool;
     },
+    setIsRandom(state, bool) {
+      state.isRandom = bool;
+    },
   },
 
   actions: {
@@ -64,7 +68,7 @@ export const picturesModule = {
         /*----------------REAL PICTURES----------------- */
         const getRandomPictures = () =>
           axios.get("https://api.unsplash.com/photos/random", {
-            params: queryParams,
+            params: { ...queryParams, query: state.searchQuery },
           });
         const getLikedPictures = () =>
           axios.get(
@@ -74,12 +78,17 @@ export const picturesModule = {
 
         let response;
         if (route === "/") {
+          commit("setIsRandom", true);
           response = await getRandomPictures();
         } else if (route === "/favorites") {
+          commit("setIsRandom", false);
           response = await getLikedPictures();
         }
 
         commit("setPictures", response.data);
+        if (response.data.length === 0) {
+          commit("setNoImagesLeft", true);
+        }
 
         /*----------------REAL PICTURES----------------- */
 
@@ -98,6 +107,7 @@ export const picturesModule = {
         /*----------------MOCK PICTURES----------------- */
       } catch (error) {
         commit("setIsPicturesError", true);
+        commit("setPictures", []);
         console.error(error, "Ошибка при загрузке изображений");
       } finally {
         commit("setIsPicturesLoading", false);
@@ -159,6 +169,7 @@ export const picturesModule = {
         /*----------------MOCK PICTURES----------------- */
       } catch (error) {
         commit("setIsPicturesError", true);
+        commit("setPictures", []);
         console.error(error, "Ошибка при загрузке изображений");
       } finally {
         commit("setIsPicturesLoading", false);

@@ -1,12 +1,58 @@
 <template>
   <div class="container">
     <h1>Избранное</h1>
-    <pictures-list currentRoute="/favorites" />
+    <h1 v-if="pictures.length === 0 && noImagesLeft">
+      У вас нет картинок в избранных
+    </h1>
+    <pictures-list :pictures="pictures" />
+    <div class="observer" ref="observer"></div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions } from "vuex";
+
+export default {
+  computed: {
+    ...mapState({
+      isRandom: (state) => state.pictures.isRandom,
+      pictures: (state) => state.pictures.pictures,
+      noImagesLeft: (state) => state.pictures.noImagesLeft,
+    }),
+  },
+
+  methods: {
+    ...mapActions({
+      fetchPictures: "pictures/fetchPictures",
+      loadMorePictures: "pictures/loadMorePictures",
+    }),
+
+    initializeIntersectionObserver() {
+      let options = {
+        rootMargin: "0px",
+        threshold: 1.0,
+      };
+      let callback = (entries, observer) => {
+        if (entries[0].isIntersecting && this.pictures.length > 0) {
+          this.loadMorePictures("/favorites");
+        }
+      };
+
+      let observer = new IntersectionObserver(callback, options);
+      this.$nextTick(() => {
+        observer.observe(this.$refs.observer);
+      });
+    },
+  },
+
+  mounted() {
+    if (this.isRandom) {
+      this.fetchPictures("/favorites");
+    }
+
+    this.initializeIntersectionObserver();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

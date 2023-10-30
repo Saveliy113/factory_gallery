@@ -21,7 +21,7 @@
         <img :src="picture.urls.regular" alt="" />
       </div>
     </TransitionGroup>
-    <div class="observer" ref="observer" v-if="pictures.length !== 0"></div>
+
     <mini-loader
       class="mini-loader"
       :isLoading="isPicturesLoading && pictures.length > 0"
@@ -31,71 +31,24 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "pictures-list",
 
   props: {
-    currentRoute: {
-      type: String,
+    pictures: {
+      type: Array,
       required: true,
     },
   },
 
-  methods: {
-    ...mapMutations({
-      setPictures: "pictures/setPictures",
-    }),
-    ...mapActions({
-      fetchPictures: "pictures/fetchPictures",
-      loadMorePictures: "pictures/loadMorePictures",
-    }),
-  },
-
   computed: {
     ...mapState({
-      searchQuery: (state) => state.pictures.searchQuery,
-      pictures: (state) => state.pictures.pictures,
       isPicturesLoading: (state) => state.pictures.isPicturesLoading,
       isPicturesError: (state) => state.pictures.isPicturesError,
       noImagesLeft: (state) => state.pictures.noImagesLeft,
     }),
-  },
-
-  mounted() {
-    if (
-      (!this.searchQuery && this.currentRoute === "/") ||
-      this.currentRoute === "/favorites"
-    ) {
-      this.fetchPictures(this.currentRoute);
-    }
-
-    let options = {
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
-    let callback = (entries, observer) => {
-      if (entries[0].isIntersecting) {
-        console.log("INTERSECTED");
-      }
-      if (
-        (entries[0].isIntersecting && this.searchQuery && !this.noImagesLeft) ||
-        (entries[0].isIntersecting &&
-          this.currentRoute === "/favorites" &&
-          !this.noImagesLeft)
-      ) {
-        this.loadMorePictures(this.currentRoute);
-      }
-    };
-    let observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);
-  },
-
-  watch: {
-    searchQuery(newSearchQuery) {
-      this.fetchPictures(this.currentRoute);
-    },
   },
 };
 </script>
@@ -136,7 +89,7 @@ export default {
   }
 
   > .picture__item {
-    width: 473px;
+    width: 453px;
     height: 440px;
     cursor: pointer;
 
@@ -147,11 +100,7 @@ export default {
     }
   }
 
-  > .observer {
-    width: 100%;
-    height: 10px;
-    background: green;
-  }
+  
 
   > .pictures__scroll {
     position: absolute;
