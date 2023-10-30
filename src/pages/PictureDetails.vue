@@ -1,5 +1,5 @@
 <template>
-  <div v-if="picture" class="picture__details">
+  <div v-if="picture" class="picture__details" ley="details">
     <div class="details__background">
       <img :src="picture.urls.full" alt="" />
     </div>

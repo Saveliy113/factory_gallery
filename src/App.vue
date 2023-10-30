@@ -1,7 +1,11 @@
 <template>
   <MainHeader />
-
-  <router-view> </router-view>
+  <!-- <router-view /> -->
+  <router-view v-slot="{ Component }">
+    <transition name="fade">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 </template>
 
 <script>
@@ -41,5 +45,15 @@ a {
   max-width: 1479px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -1,18 +1,20 @@
 <template>
-  <div class="search__wrapper">
-    <div class="background">
-      <img src="@/assets/search_background.jpg" alt="Search Background" />
+  <div key="home">
+    <div class="search__wrapper">
+      <div class="background">
+        <img src="@/assets/search_background.jpg" alt="Search Background" />
+      </div>
+      <search-input
+        :model-value="searchQuery"
+        @update:model-value="setSearchQuery"
+      ></search-input>
     </div>
-    <search-input
-      :model-value="searchQuery"
-      @update:model-value="setSearchQuery"
-    ></search-input>
+    <h1 v-if="pictures.length === 0 && noImagesLeft">
+      По вашему запросу картинок не найдено
+    </h1>
+    <pictures-list :pictures="pictures" />
+    <div class="observer" ref="observer"></div>
   </div>
-  <h1 v-if="pictures.length === 0 && noImagesLeft">
-    По вашему запросу картинок не найдено
-  </h1>
-  <pictures-list :pictures="pictures" />
-  <div class="observer" ref="observer"></div>
 </template>
 
 <script>

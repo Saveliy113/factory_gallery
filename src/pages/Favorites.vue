@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" key="favorites">
     <h1>Избранное</h1>
     <h1 v-if="pictures.length === 0 && noImagesLeft">
       У вас нет картинок в избранных
