@@ -71,71 +71,71 @@ export default {};
         width: 140px;
       }
     }
+  }
 
-    > .container {
-      height: 100%;
+  > .container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > a {
+      display: block;
+      max-width: 185px;
+      height: 70px;
+
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    > .header__actions {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      gap: 20px;
 
       > a {
-        display: block;
-        max-width: 185px;
-        height: 70px;
-
-        > img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-      }
-
-      > .header__actions {
+        position: relative;
         display: flex;
-        gap: 20px;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        text-decoration: none;
+        font-size: 1.125rem;
+        color: white;
+        transition: all 0.2s ease-in;
 
-        > a {
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          gap: 10px;
-          text-decoration: none;
-          font-size: 1.125rem;
-          color: white;
+        > svg {
+          fill: white;
           transition: all 0.2s ease-in;
-
-          > svg {
-            fill: white;
-            transition: all 0.2s ease-in;
-          }
-
-          &:hover {
-            transform: translateY(-3px);
-          }
         }
 
-        > .links-move,
-        > .links-enter-active,
-        > .links-leave-active {
-          transition: all 0.3s ease;
-        }
-
-        > .links-enter-from,
-        > .links-leave-to {
-          opacity: 0;
-        }
-
-        > .links-leave-active {
-          position: absolute;
-        }
-        > .transition-appear-active {
-          transition: none;
+        &:hover {
+          transform: translateY(-3px);
         }
       }
 
-      /**/
+      > .links-move,
+      > .links-enter-active,
+      > .links-leave-active {
+        transition: all 0.3s ease;
+      }
+
+      > .links-enter-from,
+      > .links-leave-to {
+        opacity: 0;
+      }
+
+      > .links-leave-active {
+        position: absolute;
+      }
+      > .transition-appear-active {
+        transition: none;
+      }
     }
+
+    /**/
   }
 }
 

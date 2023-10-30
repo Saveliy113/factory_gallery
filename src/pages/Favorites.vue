@@ -58,8 +58,21 @@ export default {
 <style lang="scss" scoped>
 .container {
   border: 1px solid blue;
-  padding-top: 5.875rem;
+  padding-top: 5rem;
+  margin-top: 0 !important;
   color: black;
   font-size: 2rem;
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    > h1 {
+      font-size: 2.25rem;
+
+      &:nth-child(2) {
+        font-size: 1rem;
+      }
+    }
+  }
 }
 </style>

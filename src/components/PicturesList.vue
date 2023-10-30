@@ -26,7 +26,7 @@
       class="mini-loader"
       :isLoading="isPicturesLoading && pictures.length > 0"
     />
-    <scroll-button class="pictures__scroll" />
+    <scroll-button class="pictures__scroll" v-if="pictures.length > 0" />
   </div>
 </template>
 
@@ -100,12 +100,10 @@ export default {
     }
   }
 
-  
-
   > .pictures__scroll {
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 5px;
     z-index: 1;
   }
 
@@ -135,6 +133,14 @@ export default {
   > .loader-enter-from,
   > .loader-leave-to {
     opacity: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    > .error__message {
+      font-size: 2rem;
+    }
   }
 }
 </style>
