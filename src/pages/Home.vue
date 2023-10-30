@@ -43,7 +43,7 @@ export default {
         rootMargin: "0px",
         threshold: 1.0,
       };
-      let callback = (entries, observer) => {
+      let callback = (entries) => {
         if (entries[0].isIntersecting && this.pictures.length > 0) {
           this.loadMorePictures("/");
         }
@@ -81,7 +81,6 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
   border-bottom: 16px solid #c4c4c4;
   > .background {
     height: 268px;
@@ -99,7 +98,6 @@ h1 {
 }
 .observer {
   width: 100%;
-  height: 10px;
-  background: green;
+  height: 5px;
 }
 </style>

@@ -91,6 +91,8 @@ export default {
   > .picture__item {
     width: 453px;
     height: 440px;
+    border-radius: 8px;
+    overflow: hidden;
     cursor: pointer;
 
     > img {

@@ -57,11 +57,22 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  border: 1px solid blue;
-  padding-top: 5rem;
   margin-top: 0 !important;
-  color: black;
+  padding-top: 5rem;
+  border: 1px solid blue;
   font-size: 2rem;
+  color: black;
+
+  > h1 {
+    margin-bottom: 50px;
+    font-size: 4.5rem;
+
+    &:nth-child(2) {
+      font-size: 3rem;
+      margin-top: 100px;
+      color: rgba(0, 0, 0, 0.72);
+    }
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -70,7 +81,7 @@ export default {
       font-size: 2.25rem;
 
       &:nth-child(2) {
-        font-size: 1rem;
+        font-size: 1.8rem;
       }
     }
   }

@@ -76,34 +76,34 @@ export const picturesModule = {
             apiConfig
           );
 
-        let response;
-        if (route === "/") {
-          commit("setIsRandom", true);
-          response = await getRandomPictures();
-        } else if (route === "/favorites") {
-          commit("setIsRandom", false);
-          response = await getLikedPictures();
-        }
+        // let response;
+        // if (route === "/") {
+        //   commit("setIsRandom", true);
+        //   response = await getRandomPictures();
+        // } else if (route === "/favorites") {
+        //   commit("setIsRandom", false);
+        //   response = await getLikedPictures();
+        // }
 
-        commit("setPictures", response.data);
-        if (response.data.length === 0) {
-          commit("setNoImagesLeft", true);
-        }
+        // commit("setPictures", response.data);
+        // if (response.data.length === 0) {
+        //   commit("setNoImagesLeft", true);
+        // }
 
         /*----------------REAL PICTURES----------------- */
 
         /*----------------MOCK PICTURES----------------- */
-        // const mockPictures = () => {
-        //   return new Promise((resolve, reject) => {
-        //     setTimeout(() => {
-        //       resolve(picturesData);
-        //     }, 3000);
-        //   });
-        // };
-        // await mockPictures().then((data) => {
-        //   console.log(data);
-        //   commit("setPictures", data);
-        // });
+        const mockPictures = () => {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(picturesData);
+            }, 3000);
+          });
+        };
+        await mockPictures().then((data) => {
+          console.log(data);
+          commit("setPictures", data);
+        });
         /*----------------MOCK PICTURES----------------- */
       } catch (error) {
         commit("setIsPicturesError", true);
@@ -139,33 +139,33 @@ export const picturesModule = {
             },
           });
 
-        // let response;
-        // if (route === "/") {
-        //   response = await getRandomPictures();
-        // } else if (route === "/favorites") {
-        //   response = await getLikedPictures();
-        // }
+        let response;
+        if (route === "/") {
+          response = await getRandomPictures();
+        } else if (route === "/favorites") {
+          response = await getLikedPictures();
+        }
 
-        // commit("setPictures", [...state.pictures, ...response.data]);
+        commit("setPictures", [...state.pictures, ...response.data]);
 
-        // if (response.data.length === 0) {
-        //   commit("setNoImagesLeft", true);
-        // }
+        if (response.data.length === 0) {
+          commit("setNoImagesLeft", true);
+        }
 
         /*----------------REAL PICTURES----------------- */
 
         /*----------------MOCK PICTURES----------------- */
-        const mockPictures = () => {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve(picturesData);
-            }, 3000);
-          });
-        };
-        await mockPictures().then((data) => {
-          console.log(data);
-          commit("setPictures", data);
-        });
+        // const mockPictures = () => {
+        //   return new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //       resolve(picturesData);
+        //     }, 3000);
+        //   });
+        // };
+        // await mockPictures().then((data) => {
+        //   console.log(data);
+        //   commit("setPictures", data);
+        // });
         /*----------------MOCK PICTURES----------------- */
       } catch (error) {
         commit("setIsPicturesError", true);

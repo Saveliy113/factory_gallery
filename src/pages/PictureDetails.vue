@@ -53,7 +53,7 @@
                 fill="black"
               />
             </svg>
-            Download
+            <span>Download</span>
           </a>
         </div>
       </div>
@@ -89,7 +89,6 @@ export default {
 
     async toggleLike() {
       const response = await this.setLike(this.picture.id, this.isLiked);
-      console.log("Axios like response", response.data.photo);
       if (this.isSetLikeSuccess) {
         this.updatePictures(response.data.photo);
         this.isLiked = !this.isLiked;
@@ -262,6 +261,56 @@ export default {
         width: 100%;
         height: 100%;
         object-fit: contain;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .picture__details {
+    height: fit-content;
+
+    > .container {
+      > .details__wrapper {
+        gap: 15px;
+        > .author {
+          padding: 5px;
+
+          > .author__img {
+            flex-shrink: 0;
+          }
+          > .author__text {
+            > h3 {
+              font-size: 1.125rem;
+            }
+
+            > a {
+              font-size: 0.875rem;
+            }
+          }
+        }
+
+        > .details__actions {
+          gap: 5px;
+
+          > button,
+          > a {
+            width: 50px;
+            > span {
+              display: none;
+            }
+          }
+        }
+      }
+
+      > .picture {
+        border-radius: 8px;
+        overflow: hidden;
+        width: 100%;
+        height: 400px;
+        > img {
+          object-fit: cover;
+        }
       }
     }
   }

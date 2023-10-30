@@ -7,5 +7,4 @@ export const apiConfig = {
 export const queryParams = {
   client_id: process.env.VUE_APP_ACCESS_KEY,
   count: 8,
-  // query: state.searchQuery,
 };
