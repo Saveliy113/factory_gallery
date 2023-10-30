@@ -23,6 +23,7 @@
     </TransitionGroup>
     <div class="observer" ref="observer"></div>
     <mini-loader class="mini-loader" :isLoading="isPicturesLoading" />
+    <scroll-button class="pictures__scroll" />
   </div>
 </template>
 
@@ -135,7 +136,7 @@ export default {
     }
   }
 
-  .picture__item {
+  > .picture__item {
     width: 473px;
     height: 440px;
     cursor: pointer;
@@ -150,7 +151,13 @@ export default {
   > .observer {
     width: 100%;
     height: 0px;
-    background-color: pink;
+  }
+
+  > .pictures__scroll {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
   }
 
   /* apply transition to moving elements */
