@@ -26,6 +26,9 @@ export default {
       setSearchQuery: "pictures/setSearchQuery",
     }),
   },
+  mounted() {
+    console.log('123');
+  }
 };
 </script>
 

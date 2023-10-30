@@ -21,15 +21,17 @@
         <img :src="picture.urls.regular" alt="" />
       </div>
     </TransitionGroup>
-    <div class="observer" ref="observer"></div>
-    <mini-loader class="mini-loader" :isLoading="isPicturesLoading" />
+    <div class="observer" ref="observer" v-if="pictures.length !== 0"></div>
+    <mini-loader
+      class="mini-loader"
+      :isLoading="isPicturesLoading && pictures.length > 0"
+    />
     <scroll-button class="pictures__scroll" />
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import usePictures from "@/hooks/usePictures.js";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "pictures-list",
@@ -40,17 +42,6 @@ export default {
       required: true,
     },
   },
-
-  // setup(props) {
-  //   const { pictures, isPicturesLoading, isPicturesError } = usePictures(8);
-  //   console.log(pictures, isPicturesLoading);
-
-  //   return {
-  //     pictures,
-  //     isPicturesLoading,
-  //     isPicturesError,
-  //   };
-  // },
 
   methods: {
     ...mapMutations({
@@ -68,11 +59,15 @@ export default {
       pictures: (state) => state.pictures.pictures,
       isPicturesLoading: (state) => state.pictures.isPicturesLoading,
       isPicturesError: (state) => state.pictures.isPicturesError,
+      noImagesLeft: (state) => state.pictures.noImagesLeft,
     }),
   },
 
   mounted() {
-    if (!this.searchQuery) {
+    if (
+      (!this.searchQuery && this.currentRoute === "/") ||
+      this.currentRoute === "/favorites"
+    ) {
       this.fetchPictures(this.currentRoute);
     }
 
@@ -81,9 +76,16 @@ export default {
       threshold: 1.0,
     };
     let callback = (entries, observer) => {
-      if (entries[0].isIntersecting && this.searchQuery) {
-        // this.loadMorePictures(this.currentRoute);
+      if (entries[0].isIntersecting) {
         console.log("INTERSECTED");
+      }
+      if (
+        (entries[0].isIntersecting && this.searchQuery && !this.noImagesLeft) ||
+        (entries[0].isIntersecting &&
+          this.currentRoute === "/favorites" &&
+          !this.noImagesLeft)
+      ) {
+        this.loadMorePictures(this.currentRoute);
       }
     };
     let observer = new IntersectionObserver(callback, options);
@@ -94,9 +96,6 @@ export default {
     searchQuery(newSearchQuery) {
       this.fetchPictures(this.currentRoute);
     },
-    // pictures(newPictures) {
-    //   console.log("Received new pictures: ", newPictures);
-    // },
   },
 };
 </script>
@@ -150,7 +149,8 @@ export default {
 
   > .observer {
     width: 100%;
-    height: 0px;
+    height: 10px;
+    background: green;
   }
 
   > .pictures__scroll {

@@ -10,7 +10,8 @@ export const picturesModule = {
     isPicturesError: false,
     searchQuery: "",
     limit: 8,
-    page: 0,
+    page: 1,
+    noImagesLeft: false,
   }),
 
   getters: {
@@ -44,7 +45,10 @@ export const picturesModule = {
       state.page += 1;
     },
     resetPage(state) {
-      state.page = 0;
+      state.page = 1;
+    },
+    setNoImagesLeft(state, bool) {
+      state.noImagesLeft = bool;
     },
   },
 
@@ -54,11 +58,8 @@ export const picturesModule = {
         commit("setIsPicturesError", false);
         commit("setIsPicturesLoading", true);
         commit("setPictures", []);
-
-        // if (state.searchQuery) {
-        //   queryParams.count = 10;
-        //   queryParams.page = state.page;
-        // }
+        commit("resetPage");
+        commit("setNoImagesLeft", false);
 
         /*----------------REAL PICTURES----------------- */
         const getRandomPictures = () =>
@@ -66,7 +67,10 @@ export const picturesModule = {
             params: queryParams,
           });
         const getLikedPictures = () =>
-          axios.get("https://api.unsplash.com/users/saveliy_d/likes", config);
+          axios.get(
+            "https://api.unsplash.com/users/saveliy_d/likes",
+            apiConfig
+          );
 
         let response;
         if (route === "/") {
@@ -105,10 +109,6 @@ export const picturesModule = {
         commit("setIsPicturesError", false);
         commit("setIsPicturesLoading", true);
         commit("incrementPage");
-        // if (state.searchQuery) {
-        //   queryParams.count = 10;
-        //   queryParams.page = state.page;
-        // }
 
         /*----------------REAL PICTURES----------------- */
         const getRandomPictures = () =>
@@ -121,7 +121,13 @@ export const picturesModule = {
             },
           });
         const getLikedPictures = () =>
-          axios.get("https://api.unsplash.com/users/saveliy_d/likes", config);
+          axios.get("https://api.unsplash.com/users/saveliy_d/likes", {
+            ...apiConfig,
+            params: {
+              per_page: 10,
+              page: state.page,
+            },
+          });
 
         let response;
         if (route === "/") {
@@ -131,6 +137,10 @@ export const picturesModule = {
         }
 
         commit("setPictures", [...state.pictures, ...response.data]);
+
+        if (response.data.length === 0) {
+          commit("setNoImagesLeft", true);
+        }
 
         /*----------------REAL PICTURES----------------- */
 

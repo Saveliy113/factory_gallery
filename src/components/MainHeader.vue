@@ -1,7 +1,9 @@
 <template>
   <header id="header" :class="{ narrow: $route.path !== '/' }">
     <div class="container">
-      <img src="@/assets/logo.png" alt="" />
+      <router-link to="/">
+        <img src="@/assets/logo.png" alt="Company Logo" />
+      </router-link>
       <div
         class="header__actions"
         :class="
