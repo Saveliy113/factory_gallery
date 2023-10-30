@@ -5,7 +5,10 @@
       обновить страницу.
     </h1>
     <Transition name="loader">
-      <loader id="pictures__loader" v-if="isPicturesLoading" />
+      <loader
+        id="pictures__loader"
+        v-if="!pictures.length && isPicturesLoading"
+      />
     </Transition>
     <TransitionGroup name="pictures">
       <div
@@ -18,6 +21,8 @@
         <img :src="picture.urls.regular" alt="" />
       </div>
     </TransitionGroup>
+    <div class="observer" ref="observer"></div>
+    <mini-loader class="mini-loader" :isLoading="isPicturesLoading" />
   </div>
 </template>
 
@@ -27,6 +32,13 @@ import usePictures from "@/hooks/usePictures.js";
 
 export default {
   name: "pictures-list",
+
+  props: {
+    currentRoute: {
+      type: String,
+      required: true,
+    },
+  },
 
   // setup(props) {
   //   const { pictures, isPicturesLoading, isPicturesError } = usePictures(8);
@@ -45,6 +57,7 @@ export default {
     }),
     ...mapActions({
       fetchPictures: "pictures/fetchPictures",
+      loadMorePictures: "pictures/loadMorePictures",
     }),
   },
 
@@ -59,13 +72,26 @@ export default {
 
   mounted() {
     if (!this.searchQuery) {
-      this.fetchPictures();
+      this.fetchPictures(this.currentRoute);
     }
+
+    let options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+    let callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.searchQuery) {
+        // this.loadMorePictures(this.currentRoute);
+        console.log("INTERSECTED");
+      }
+    };
+    let observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
 
   watch: {
     searchQuery(newSearchQuery) {
-      this.fetchPictures();
+      this.fetchPictures(this.currentRoute);
     },
     // pictures(newPictures) {
     //   console.log("Received new pictures: ", newPictures);
@@ -79,6 +105,7 @@ export default {
   position: relative;
   min-height: 150px;
   margin-top: 114px;
+  padding-bottom: 50px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -90,6 +117,11 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -70%);
+  }
+
+  > .mini-loader {
+    position: absolute;
+    bottom: 0;
   }
 
   > .error__message {
@@ -113,6 +145,12 @@ export default {
       height: 100%;
       object-fit: cover;
     }
+  }
+
+  > .observer {
+    width: 100%;
+    height: 0px;
+    background-color: pink;
   }
 
   /* apply transition to moving elements */

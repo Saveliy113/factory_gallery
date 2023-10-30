@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import axios from "axios";
+import { apiConfig } from "@/configs/apiConfig";
 
 export default function useLikePicture(onLikeChanged) {
   const isSetLikeLoading = ref(false);
@@ -7,50 +8,11 @@ export default function useLikePicture(onLikeChanged) {
   const isSetLikeError = ref(false);
 
   const setLike = async (pictureId, isLiked) => {
-    const url = `https://api.unsplash.com/photos/${pictureId}/like`;
-    const accessKey = "SNlIyTVM4zTTQiKjAd_zwNZfAMStHzCNRsGccpetsEw";
-    const token = "J852REmKi49sxLd1caSHAqq8JFoDABjuH5s2i_8vCiU";
-    const username = "saveliy_d";
-    const collectionId = "bNrK2noljkI";
-    const photoId = "z-qhQ1XP8_c";
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+    console.log(process.env.API_KEY);
+    const url = `${process.env.VUE_APP_BASE_URL}/photos/${pictureId}/like`;
 
-    const like = () => axios.post(url, {}, config);
-    const dislike = () => axios.delete(url, config);
-
-    // await axios
-    //   .post(
-    //     `https://api.unsplash.com/collections/${collectionId}/add`,
-    //     {
-    //       params: {
-    //         photo_id: photoId,
-    //       },
-    //     },
-    //     config
-    //   )
-    //   .then((response) => {
-    //     // Обработка успешного ответа с коллекциями
-    //     const collections = response.data;
-    //     console.log("Added photo to collection", collections);
-    //   })
-    //   .catch((error) => {
-    //     // Обработка ошибки
-    //     console.error(error);
-    //   });
-
-    // const mockLike = () =>
-    //   new Promise((resolve, reject) =>
-    //     setTimeout(() => resolve("Like was set successfully"), 3000)
-    //   );
-
-    // const mockDislike = () =>
-    //   new Promise((resolve, reject) =>
-    //     setTimeout(() => resolve("DisLike was set successfully"), 3000)
-    //   );
+    const like = () => axios.post(url, {}, apiConfig);
+    const dislike = () => axios.delete(url, apiConfig);
 
     try {
       isSetLikeLoading.value = true;
@@ -58,6 +20,7 @@ export default function useLikePicture(onLikeChanged) {
       isSetLikeError.value = false;
       let response;
 
+      /*----------------------------REAL LIKE---------------------------------- */
       if (!isLiked) {
         response = await like();
       } else {
@@ -67,6 +30,18 @@ export default function useLikePicture(onLikeChanged) {
         isSetLikeSuccess.value = true;
         return response;
       }
+      /*----------------------------REAL LIKE---------------------------------- */
+
+      /*----------------------------MOCK LIKE---------------------------------- */
+      // const mockLike = () =>
+      //   new Promise((resolve, reject) =>
+      //     setTimeout(() => resolve("Like was set successfully"), 3000)
+      //   );
+
+      // const mockDislike = () =>
+      //   new Promise((resolve, reject) =>
+      //     setTimeout(() => resolve("DisLike was set successfully"), 3000)
+      //   );
 
       // if (!isLiked) {
       //   response = await mockLike().then((data) => console.log(data));
@@ -74,6 +49,7 @@ export default function useLikePicture(onLikeChanged) {
       //   response = await mockDislike().then((data) => console.log(data));
       // }
       // isSetLikeSuccess.value = true;
+      /*----------------------------MOCK LIKE---------------------------------- */
     } catch (error) {
       isSetLikeError.value = true;
       console.error(error, "Ошибка при загрузке изображений");

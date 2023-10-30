@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "another-vue3-blurhash": "^0.0.1",
     "axios": "^1.6.0",
     "core-js": "^3.8.3",
     "lodash.debounce": "^4.0.8",

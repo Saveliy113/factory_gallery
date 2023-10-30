@@ -1,5 +1,7 @@
 import axios from "axios";
+import { queryParams } from "@/configs/apiConfig";
 import picturesData from "./picturesData";
+import { apiConfig } from "@/configs/apiConfig";
 
 export const picturesModule = {
   state: () => ({
@@ -8,15 +10,11 @@ export const picturesModule = {
     isPicturesError: false,
     searchQuery: "",
     limit: 8,
+    page: 0,
   }),
 
   getters: {
     pictureById: (state) => (pictureId) => {
-      console.log("Picture ID in module: ", pictureId);
-      console.log(
-        "Picture: ",
-        state.pictures.find((picture) => picture.id === pictureId)
-      );
       return state.pictures.filter((picture) => picture.id === pictureId)[0];
     },
   },
@@ -42,52 +40,116 @@ export const picturesModule = {
     setSearchQuery(state, searchQuery) {
       state.searchQuery = searchQuery;
     },
+    incrementPage(state) {
+      state.page += 1;
+    },
+    resetPage(state) {
+      state.page = 0;
+    },
   },
 
   actions: {
-    async fetchPictures({ state, commit }) {
+    async fetchPictures({ state, commit }, route) {
       try {
         commit("setIsPicturesError", false);
         commit("setIsPicturesLoading", true);
         commit("setPictures", []);
 
-        const queryParams = {
-          client_id: "SNlIyTVM4zTTQiKjAd_zwNZfAMStHzCNRsGccpetsEw",
-          count: 8,
-          query: state.searchQuery,
-        };
+        // if (state.searchQuery) {
+        //   queryParams.count = 10;
+        //   queryParams.page = state.page;
+        // }
 
-        if (state.searchQuery) {
-          queryParams.count = 30;
-          queryParams.page = 1;
+        /*----------------REAL PICTURES----------------- */
+        const getRandomPictures = () =>
+          axios.get("https://api.unsplash.com/photos/random", {
+            params: queryParams,
+          });
+        const getLikedPictures = () =>
+          axios.get("https://api.unsplash.com/users/saveliy_d/likes", config);
+
+        let response;
+        if (route === "/") {
+          response = await getRandomPictures();
+        } else if (route === "/favorites") {
+          response = await getLikedPictures();
         }
 
-        // const response = await axios.get(
-        //   "https://api.unsplash.com/photos/random",
-        //   {
-        //     params: queryParams,
-        //   }
-        // );
-        // commit("setPictures", response.data);
+        commit("setPictures", response.data);
 
-        const mockPictures = () => {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve(picturesData);
-            }, 3000);
-          });
-        };
-        await mockPictures().then((data) => {
-          console.log(data);
-          commit("setPictures", data);
-        });
+        /*----------------REAL PICTURES----------------- */
 
-        // console.log(response);
-        // console.log(response.data);
-        // console.log(response.data);
+        /*----------------MOCK PICTURES----------------- */
+        // const mockPictures = () => {
+        //   return new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //       resolve(picturesData);
+        //     }, 3000);
+        //   });
+        // };
+        // await mockPictures().then((data) => {
+        //   console.log(data);
+        //   commit("setPictures", data);
+        // });
+        /*----------------MOCK PICTURES----------------- */
       } catch (error) {
         commit("setIsPicturesError", true);
-        console.error("Ошибка при загрузке изображений");
+        console.error(error, "Ошибка при загрузке изображений");
+      } finally {
+        commit("setIsPicturesLoading", false);
+      }
+    },
+
+    async loadMorePictures({ state, commit }, route) {
+      try {
+        commit("setIsPicturesError", false);
+        commit("setIsPicturesLoading", true);
+        commit("incrementPage");
+        // if (state.searchQuery) {
+        //   queryParams.count = 10;
+        //   queryParams.page = state.page;
+        // }
+
+        /*----------------REAL PICTURES----------------- */
+        const getRandomPictures = () =>
+          axios.get("https://api.unsplash.com/photos/random", {
+            params: {
+              ...queryParams,
+              count: 10,
+              page: state.page,
+              query: state.searchQuery,
+            },
+          });
+        const getLikedPictures = () =>
+          axios.get("https://api.unsplash.com/users/saveliy_d/likes", config);
+
+        let response;
+        if (route === "/") {
+          response = await getRandomPictures();
+        } else if (route === "/favorites") {
+          response = await getLikedPictures();
+        }
+
+        commit("setPictures", [...state.pictures, ...response.data]);
+
+        /*----------------REAL PICTURES----------------- */
+
+        /*----------------MOCK PICTURES----------------- */
+        // const mockPictures = () => {
+        //   return new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //       resolve(picturesData);
+        //     }, 3000);
+        //   });
+        // };
+        // await mockPictures().then((data) => {
+        //   console.log(data);
+        //   commit("setPictures", data);
+        // });
+        /*----------------MOCK PICTURES----------------- */
+      } catch (error) {
+        commit("setIsPicturesError", true);
+        console.error(error, "Ошибка при загрузке изображений");
       } finally {
         commit("setIsPicturesLoading", false);
       }

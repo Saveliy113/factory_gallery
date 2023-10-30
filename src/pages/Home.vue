@@ -8,7 +8,7 @@
       @update:model-value="setSearchQuery"
     ></search-input>
   </div>
-  <pictures-list />
+  <pictures-list currentRoute="/" />
 </template>
 
 <script>
