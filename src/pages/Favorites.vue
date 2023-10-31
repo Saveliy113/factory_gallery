@@ -33,7 +33,7 @@ export default {
         threshold: 1.0,
       };
       let callback = (entries, observer) => {
-        if (entries[0].isIntersecting && this.pictures.length > 0) {
+        if (entries[0].isIntersecting && this.pictures.length > 0 && !this.noImagesLeft) {
           this.loadMorePictures("/favorites");
         }
       };
