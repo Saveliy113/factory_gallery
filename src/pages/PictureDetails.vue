@@ -12,6 +12,7 @@
           <div class="author__text">
             <h3>{{ picture.user.name }}</h3>
             <a
+              v-if="picture.user.instagram_username"
               :href="'https://instagram.com/' + picture.user.instagram_username"
               target="blank"
               >@{{ picture.user.instagram_username }}</a
